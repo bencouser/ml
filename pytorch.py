@@ -15,16 +15,30 @@ print(t3)
 
 t4 = torch.tensor([
     [[11, 12, 13],
-     [13, 14, 15]]
+    [13, 14, 15]],
     [[15, 16, 17],
-     [17, 18, 19.]]])
-
+    [17, 18, 19.]]])
 
 print(t4)
 
+print(t2.shape, t3.shape, t4.shape)
+
+# tensor operations and gradients
+
+x = torch.tensor(3.)
+w = torch.tensor(4., requires_grad=True)
+b = torch.tensor(5., requires_grad=True)
+
+y = w * x + b
+
+print(y, y.size)
+print(y.backward())
 
 
 
 
 
+
+
+print('dy/dw', w.grad)
 
