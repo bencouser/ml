@@ -167,4 +167,43 @@ loss_fn = F.mse_loss
 losdd = loss_fn(model(inputs), targets)
 print(loss)
 
+#optimisation
+opt = torch.optim.SGD(model.parameters(), lr=1e-5) #SGD = stochastic gradient descent
 
+# Utility function to train the model
+def fit(num_epochs, model, loss_fn, opt, train_dl):
+    
+    # Repeat for given number of epochs
+    for epoch in range(num_epochs):
+        
+        # Train with batches of data
+        for xb,yb in train_dl:
+            
+            # 1. Generate predictions
+            pred = model(xb)
+            
+            # 2. Calculate loss
+            loss = loss_fn(pred, yb)
+            
+            # 3. Compute gradients
+            loss.backward()
+            
+            # 4. Update parameters using gradients
+            opt.step()
+            
+            # 5. Reset the gradients to zero
+            opt.zero_grad()
+        
+        # Print the progress
+        if (epoch+1) % 10 == 0:
+            print('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, num_epochs, loss.item()))
+
+fit(100, model, loss_fn, opt, train_dl)
+
+#generate preds
+preds = model(inputs)
+print("linear neural network preds: ", preds)
+print("targets: ", targets)
+
+model(torch.tensor([[75,63,44.]]))
+print(model(torch.tensor([[75, 63, 44.]])))
