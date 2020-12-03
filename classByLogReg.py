@@ -64,11 +64,11 @@ print("log model bias shape", model.bias.shape)
 class MnistModel(nn.Module):
     def __init__(self): # initialising weights and biases using nn.Linear
         super().__init__()
-        self.linear = nn.Linear(input_size, num_classes)
+        self.linear = nn.Linear(input_size, num_classes) # making nn.linear part of this class
 
     def forward(self, xb): # this is when we pass a batch of inputs through the model
         xb = xb.reshape(-1, 784) # we flatten the tensor then pass into self.linear
-        out = self.linear(xb)
+        out = self.linear(xb) # -1 means the it can now be any batch size 
         return out
 
 model = MnistModel()
@@ -81,3 +81,13 @@ for images, labels in train_loader:
 
 print('outputs.shape: ', outputs.shape)
 print('Sample outputs :\n', outputs[:2].data)
+
+#our output we want to be 10 probabilities of it being 0,9 these arnt probabilites and thus
+# we must change them to between 0,1 and all should add to 1
+# we will use the softmax function
+import torch.nn.functional as F
+
+# applying sm
+probs = F.softmax(outputs, dim=1)
+print("sample probabilies:\n", probs[:2].data, "Sum: ", torch.sum(probs[0]).item())
+
