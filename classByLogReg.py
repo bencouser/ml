@@ -67,3 +67,12 @@ import torch.nn.functional as F
 probs = F.softmax(outputs, dim=1)
 print("sample probabilies:\n", probs[:2].data, "Sum: ", torch.sum(probs[0]).item())
 
+#find predictions by using max prob in probs output
+max_probs, preds = torch.max(probs, dim=1)
+#print(preds)
+#print(labels) we find they are not the same as we have not done any regression
+
+#evaluate matric and loss funtions
+
+
+
