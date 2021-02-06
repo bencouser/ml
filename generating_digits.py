@@ -71,6 +71,7 @@ def train_gan(gan, dataset, batch_size, coding_size, n_epochs):
             # Discriminator
             noise = tf.random.normal(shape=[batch_size, coding_size])
             generated_images = generator(noise)
+            X_batch = tf.cast(X_batch, tf.float32)
             X_fake_and_real = tf.concat([generated_images, X_batch], axis=0)
             y1 = tf.constant([[0.]] * batch_size + [[1.]] * batch_size)
             discriminator.trainable = True
