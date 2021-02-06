@@ -42,24 +42,20 @@ mnist = fetch_openml('mnist_784', version=1)
 X, y = mnist["data"], mnist["target"]
 X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
 
-coding_size = 100
+coding_size = 30
 
 print("Defining GAN")
 generator = keras.models.Sequential([
-    keras.layers.Dense(7 * 7 * 128, input_shape=[coding_size]),
-    keras.layers.Reshape([7, 7, 128]),
-    keras.layers.BatchNormalization(), 
-    keras.layers.Conv2DTranspose(64, kernel_size=5, strides=2, padding="SAME", activation="selu"),
-    keras.layers.BatchNormalization(),
-    keras.layers.Conv2DTranspose(1, kernel_size=5, strides=2, padding="SAME", activation="tanh"),
+    keras.layers.Dense(100, activation="selu", input_shape=[coding_size]),
+    keras.layers.Dense(150, activation="selu"),
+    keras.layers.Dense(28 * 28, activation="sigmoid"),
+    keras.layers.Reshape([28, 28])
     ])
 
 discriminator = keras.models.Sequential([
-    keras.layers.Conv2D(64, kernel_size=5, strides=2, padding="SAME", activation=keras.layers.LeakyReLU(0.2), input_shape=[28, 28, 1]),
-    keras.layers.Dropout(0.4),
-    keras.layers.Conv2D(128, kernel_size=5, strides=2, padding="SAME", activation=keras.layers.LeakyReLU(0.2)),
-    keras.layers.Dropout(0.4),
-    keras.layers.Flatten(),
+    keras.layers.Flatten(input_shape=[28, 28]),
+    keras.layers.Dense(150, activation="selu"),
+    keras.layers.Dense(100, activation="selu"),
     keras.layers.Dense(1, activation="sigmoid")
     ])
 
