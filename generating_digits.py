@@ -42,6 +42,12 @@ mnist = fetch_openml('mnist_784', version=1)
 X, y = mnist["data"], mnist["target"]
 X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
 
+X_train = tf.convert_to_tensor(X_train, np.float32)
+X_test = tf.convert_to_tensor(X_test, np.float32)
+y_train = tf.convert_to_tensor(y_train, np.float32)
+y_test = tf.convert_to_tensor(y_test, np.float32)
+
+
 coding_size = 30
 
 print("Defining GAN")
@@ -67,7 +73,7 @@ def train_gan(gan, dataset, batch_size, coding_size, n_epochs):
             # Discriminator
             noise = tf.random.normal(shape=[batch_size, coding_size])
             generated_images = generator(noise)
-            X_batch = tf.cast(X_batch, tf.float32)
+            #X_batch = tf.cast(X_batch, tf.float32)
             X_fake_and_real = tf.concat([generated_images, X_batch], axis=0)
             y1 = tf.constant([[0.]] * batch_size + [[1.]] * batch_size)
             discriminator.trainable = True
@@ -86,7 +92,7 @@ discriminator.compile(loss="binary_crossentropy", optimizer="rmsprop")
 discriminator.trainable = False
 gan.compile(loss="binary_crossentropy", optimizer="rmsprop")
 
-X_train_dcgan = X_train.reshape(-1, 28, 28, 1) * 2. - 1.
+#X_train_dcgan = X_train.reshape(-1, 28, 28, 1) * 2. - 1.
 
 batch_size = 32
 dataset = tf.data.Dataset.from_tensor_slices(X_train_dcgan)
